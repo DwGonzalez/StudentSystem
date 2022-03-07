@@ -14,6 +14,8 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using BackEnd.Enums;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace BackEnd.Controllers
 {
@@ -62,6 +64,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpGet("GetAllUsers")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<object> GetAllUsers()
         {
             try
