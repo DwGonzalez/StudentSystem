@@ -13,9 +13,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using BackEnd.Enums;
 
 namespace BackEnd.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
@@ -48,13 +51,13 @@ namespace BackEnd.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return await Task.FromResult("User has been registered");
+                    return await Task.FromResult(new ResponseModel(ResponseCode.OK,"User has been registered",null));
                 }
-                return await Task.FromResult(string.Join(",", result.Errors.Select(x => x.Description).ToArray()));
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, "", result.Errors.Select(x => x.Description).ToArray()));
             }
             catch (Exception ex)
             {
-                return await Task.FromResult(ex.Message);
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message,null));
             }
         }
 
@@ -64,11 +67,11 @@ namespace BackEnd.Controllers
             try
             {
                 var users = _userManager.Users.Select(x => new UserDTO(x.FullName, x.Email, x.UserName, x.DateCreated));
-                return await Task.FromResult(users);
+                return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", users));
             }
             catch (Exception ex)
             {
-                return await Task.FromResult(ex.Message);
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
             }
         }
 
@@ -87,15 +90,16 @@ namespace BackEnd.Controllers
                         var user = new UserDTO(appUser.FullName, appUser.Email, appUser.UserName, appUser.DateCreated);
                         user.Token = GenerateToken(appUser);
 
-                        return await Task.FromResult(user);
+                        return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", user));
+
                     }
                 }
 
-                return await Task.FromResult("Invalid Email or Password");
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, "Invalid Email or Password", null));
             }
             catch (Exception ex)
             {
-                return await Task.FromResult(ex.Message);
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
             }
         }
 
@@ -118,7 +122,6 @@ namespace BackEnd.Controllers
             };
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             return jwtTokenHandler.WriteToken(token);
-
         }
     }
 }

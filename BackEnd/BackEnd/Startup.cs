@@ -24,6 +24,7 @@ namespace BackEnd
 {
     public class Startup
     {
+        private readonly string _loginOrigin = "_localorigin";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -59,6 +60,16 @@ namespace BackEnd
                 };
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(_loginOrigin, builder =>
+                {
+                    builder.AllowAnyOrigin();
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                });
+            });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -77,6 +88,8 @@ namespace BackEnd
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(_loginOrigin);
 
             app.UseRouting();
 
