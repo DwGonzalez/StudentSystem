@@ -11,5 +11,9 @@ namespace BackEnd.Data
         {
 
         }
+
+        public virtual DbSet<StudentSubject> StudentSubjects { get; set; }
+        public virtual DbSet<Subject> Subjects { get; set; }
+        public virtual DbSet<Room> Rooms { get; set; }
     }
 }

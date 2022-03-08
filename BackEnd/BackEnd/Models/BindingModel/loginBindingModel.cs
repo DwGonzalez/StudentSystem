@@ -2,7 +2,7 @@
 
 namespace BackEnd.Models.BindingModel
 {
-    public class loginBindingModel
+    public class LoginBindingModel
     {
         [Required]
         public string Email { get; set; }
