@@ -1,0 +1,22 @@
+<div class="row justify-content-center text-center mt-5">
+    <div class="col-7">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of userList">
+                    <td>{{user.fullName}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.userName}}</td>
+                    <td>{{user.role}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
